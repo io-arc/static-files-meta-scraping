@@ -1,0 +1,62 @@
+name: npm publish
+env:
+  CI: true
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '!*'
+
+jobs:
+  deploy:
+    name: npm publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Use node version
+        run: |
+          echo "node version: $(node -v)"
+      - name: Package install
+        run: yarn install
+      - name: Set next version
+        shell: bash -ex {0}
+        run: |
+          PACKAGE_VERSION=$(node -p 'require("./package.json").version')
+          echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+      - name: Version check
+        id: tag_check
+        shell: bash -ex {0}
+        run: |
+          GET_API_URL="https://api.github.com/repos/$GITHUB_REPOSITORY/git/ref/tags/v$PACKAGE_VERSION"
+          http_status_code=$(curl -LI $GET_API_URL -o /dev/null -w '%{http_code}\n' -s \
+            -H "Authorization: token $GITHUB_TOKEN")
+          if [ "$http_status_code" -ne "404" ] ; then
+            echo "::set-output name=exists_tag::true"
+          else
+            echo "::set-output name=exists_tag::false"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Git tag
+        if: steps.tag_check.outputs.exists_tag == 'false'
+        uses: azu/action-package-version-to-git-tag@v2
+        with:
+          version: ${{ env.PACKAGE_VERSION }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_repo: ${{ github.repository }}
+          git_commit_sha: ${{ github.sha }}
+          git_tag_prefix: 'v'
+      - name: Release
+        id: release
+        if: steps.tag_check.outputs.exists_tag == 'false'
+        run: yarn publish --access public
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

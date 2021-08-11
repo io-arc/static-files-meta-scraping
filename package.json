@@ -1,0 +1,30 @@
+{
+  "name": "@io-arc/static-files-meta-scraping",
+  "version": "1.0.0",
+  "main": "",
+  "homepage": "https://github.com/io-arc/static-files-meta-scraping#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/io-arc/static-files-meta-scraping.git"
+  },
+  "author": "arc one",
+  "license": "MIT",
+  "keywords": [
+    "scraping",
+    "static",
+    "meta",
+    "html",
+    "og"
+  ],
+  "engines": {
+    "node": ">= 14.x",
+    "npm": ">= 6.x",
+    "yarn": ">= 1.22.x"
+  },
+  "files": [
+    "bin"
+  ],
+  "bin": {
+    "static-meta-scraping": "bin/index.js"
+  }
+}
