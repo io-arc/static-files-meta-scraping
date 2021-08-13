@@ -1,0 +1,157 @@
+style.
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  .apps {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .apps-section {
+    padding-top: 60px;
+  }
+
+  .apps-section:first-child {
+    padding-top: 0;
+  }
+
+  .apps-container {
+    padding-top: 20px;
+  }
+
+  .header {
+    padding: 20px 0;
+  }
+
+  .header h1 {
+    font-size: 30px;
+    line-height: 0;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  main {
+    padding-top: 30px;
+  }
+
+  .typography-headline {
+    font-size: 20px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #555B6E;
+    color: #6667AB;
+    margin: 0;
+  }
+
+  .table {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .table, .table th, .table td {
+    border: 1px solid #555B6E;
+    border-collapse: collapse;
+  }
+
+  .table th, .table td {
+    padding: 10px;
+  }
+
+  .table thead tr {
+    background-color: #6667AB;
+    color: #fff;
+  }
+
+  .table tbody th, .table tbody td {
+    text-align: left;
+  }
+
+  .table tbody tr:nth-child(even) {
+    background-color: #F6F4F3;
+  }
+
+  .table tbody th {
+    width: 30%;
+  }
+
+  .table tbody td {
+    width: 40%;
+  }
+
+  .not-exist {
+    color: #999;
+  }
+
+  footer {
+    padding: 80px 0 20px;
+  }
+
+  .footer {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-copy {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .footer-project {
+    line-height: 1;
+  }
+
+  .github {
+    position: fixed;
+    display: block;
+    top: 0;
+    right: 0;
+    width: 200px;
+    overflow: hidden;
+    height: 200px;
+    z-index: 9999;
+  }
+
+  .github a {
+    background: #6667AB;
+    color: #fff;
+    text-decoration: none;
+    font-family: arial, sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px 40px;
+    font-size: 16px;
+    line-height: 32px;
+    transition: 0.5s;
+    width: 200px;
+    position: absolute;
+    top: 60px;
+    right: -60px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+  }
+
+  .github a:hover {
+    background: #111;
+    color: #fff;
+  }
+
+  .github a::before, .github a::after {
+    content: "";
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 1px;
+    background: #fff;
+  }
+
+  .github a::after {
+    bottom: 1px;
+    top: auto;
+  }

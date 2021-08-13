@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Analyze static files and extract meta information.",
   "main": "",
-  "homepage": "https://github.com/io-arc/static-files-meta-scraping#readme",
+  "homepage": "https://github.com/io-arc/static-files-meta-scraping",
   "repository": {
     "type": "git",
     "url": "https://github.com/io-arc/static-files-meta-scraping.git"
@@ -38,7 +38,9 @@
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "13.0.4",
     "@types/cpx": "1.5.2",
+    "@types/glob": "7.1.4",
     "@types/inquirer": "7.3.3",
+    "@types/pug": "2.0.5",
     "@types/update-notifier": "5.1.0",
     "@typescript-eslint/eslint-plugin": "4.29.1",
     "@typescript-eslint/parser": "4.29.1",
@@ -55,10 +57,14 @@
     "typescript": "4.3.5"
   },
   "dependencies": {
+    "cheerio": "1.0.0-rc.10",
     "commander": "8.1.0",
     "cpx": "1.5.0",
+    "downloads-folder": "3.0.1",
+    "glob": "7.1.7",
     "inquirer": "8.1.2",
     "kleur": "4.1.4",
+    "pug": "3.0.2",
     "update-notifier": "5.1.0"
   }
 }

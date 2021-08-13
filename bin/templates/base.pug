@@ -1,0 +1,43 @@
+html
+  head
+    meta(charset="utf-8")
+    title Search Result
+    include components/style
+  body
+    header.header: .apps
+      h1 Search Result
+
+    main: .apps
+      for item in htmlItems
+        section.apps-section
+          h2.typography-headline= item.filename
+
+          .apps-container: table.table
+            thead: tr
+              th KEY
+              th VALUE
+              th IMAGES
+
+            tbody
+              for res in item.result
+                tr
+                  th= res.key
+                  td
+                    if res.value
+                      = res.value
+                    else
+                      span.not-exist Not exist
+
+                  //- TODO: images
+                  td &nbsp;
+
+    footer: .apps: .footer
+      small.footer-copy &copy; #[a(href=`${project}` target="_blank") io arc project] All rights reserved.
+      .footer-project
+        span v#{version}&nbsp;
+        span
+          | (
+          a(href=homepage target="_blank") GitHub
+          | )
+
+    .github: a(href=homepage target="_blank") GitHub

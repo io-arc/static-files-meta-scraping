@@ -1,7 +1,14 @@
 import typescript from 'rollup-plugin-typescript2'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
-import { author, description, homepage, license, name, version } from './package.json'
+import {
+  author,
+  description,
+  homepage,
+  license,
+  name,
+  version
+} from './package.json'
 import json from '@rollup/plugin-json'
 
 export default {
@@ -25,7 +32,17 @@ Copyright (c) 2021 ${author}
 */`
   },
 
-  external: ['update-notifier', 'commander', 'cpx', 'kleur', 'inquirer'],
+  external: [
+    'update-notifier',
+    'commander',
+    'cpx',
+    'kleur',
+    'inquirer',
+    'glob',
+    'cheerio',
+    'pug',
+    'downloads-folder'
+  ],
 
   plugins: [
     nodeResolve(),
