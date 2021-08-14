@@ -2,6 +2,7 @@
 export const searchDefault: TSearch[] = [
   { target: 'html[lang]', value: 'lang' },
   { target: 'head[prefix]', value: 'prefix' },
+  { target: 'title' },
   { target: 'meta[name="description"]' },
   { target: 'meta[property="og:type"]' },
   { target: 'meta[property="og:url"]' },
