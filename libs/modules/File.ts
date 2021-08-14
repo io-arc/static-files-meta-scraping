@@ -10,6 +10,7 @@ interface IfFileDataBlock {
   result: {
     key: string
     value?: string | null
+    image?: string
   }[]
 }
 
@@ -63,14 +64,24 @@ export default class File extends BaseModule {
     items.forEach((item) => {
       const blockArr: IfFileDataBlock['result'] = []
 
-      properties.forEach((property) => {
-        const _d = item.data.filter((d) => d.key === property.target)
+      item.data.forEach((_i) =>
+        blockArr.push({ key: _i.key, value: _i.value, image: _i.image })
+      )
 
-        const v: string[] = []
-        _d.forEach((d) => v.push(d.value))
-
-        blockArr.push({ key: property.target, value: v.join('<br>') })
-      })
+      // properties.forEach((property) => {
+      //   const _d = item.data.filter((d) => d.key === property.target)
+      //
+      //   const v: string[] = []
+      //   _d.forEach((d) => v.push(d.value))
+      //
+      //   const i: string[] = []
+      //   _d.forEach((d) => {
+      //     if (d.image == null) return
+      //     i.push(d.image)
+      //   })
+      //
+      //   blockArr.push({ key: property.target, value: v.join('<br>'), image: i })
+      // })
 
       block.push({ filename: item.filename, result: blockArr })
     })

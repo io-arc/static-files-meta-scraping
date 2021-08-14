@@ -8,14 +8,15 @@ import BaseModule from '~/libs/modules/BaseModule'
 export default class Config extends BaseModule {
   #data: IfConfigFile
 
-  constructor(ops: { ext?: string; dir?: string }) {
+  constructor(ops: { ext?: string; dir?: string; root?: string }) {
     super()
 
     const file = this.#readFile()
     this.#data = {
       search: file.search,
       ext: ops.ext || file.ext || 'html',
-      dir: ops.dir || file.dir || 'dist'
+      dir: ops.dir || file.dir || 'dist',
+      root: ops.root || file.root || '/'
     }
   }
 
@@ -29,6 +30,10 @@ export default class Config extends BaseModule {
 
   public searchProperties(): TSearch[] {
     return this.#data.search
+  }
+
+  public rootPath(): string {
+    return this.#data.root as string
   }
 
   /** Read for configuration file */

@@ -29,9 +29,10 @@
     "static-meta-scraping": "bin/index.js"
   },
   "scripts": {
+    "create:pug": "node tasks/createPugs.js",
     "prepare": "husky install",
     "lint": "eslint --ext .ts --ignore-path .eslintignore .",
-    "prebuild": "run-s lint",
+    "prebuild": "run-s create:pug lint",
     "build": "rollup -c"
   },
   "devDependencies": {

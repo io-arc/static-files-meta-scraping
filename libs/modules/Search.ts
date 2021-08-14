@@ -1,7 +1,8 @@
 import cheerio from 'cheerio'
 import fs from 'fs'
 import glob from 'glob'
-import { regExt } from '~/libs/const/utils'
+import path from 'path'
+import { regExt, regImageExt } from '~/libs/const/utils'
 import BaseModule from '~/libs/modules/BaseModule'
 
 interface IfSearchItem {
@@ -21,7 +22,7 @@ export default class Search extends BaseModule {
     this.#dir = dir
   }
 
-  public exec(searchProperties: TSearch[]): IfSearchResult[] {
+  public exec(searchProperties: TSearch[], root: string): IfSearchResult[] {
     if (this.#files.length === 0) {
       // TODO: end
       return []
@@ -51,7 +52,7 @@ export default class Search extends BaseModule {
           return
         default:
           // HTML
-          const data = this.#html(body, searchProperties)
+          const data = this.#html(body, searchProperties, root)
           result.push({ filename, type: 'html', data })
           return
       }
@@ -92,8 +93,13 @@ export default class Search extends BaseModule {
    * HTML file
    * @param body
    * @param properties
+   * @param root
    */
-  #html = (body: string, properties: TSearch[]): IfSearchResult['data'] => {
+  #html = (
+    body: string,
+    properties: TSearch[],
+    root: string
+  ): IfSearchResult['data'] => {
     const $ = cheerio.load(body)
     const data: IfSearchResult['data'] = []
 
@@ -109,9 +115,19 @@ export default class Search extends BaseModule {
         const value = attr == null ? $(node).text() : $(node).attr(attr)
         if (value == null) return
 
-        // TODO: 画像の場合はファイルをチェックしてbase64に変換
-
-        data.push({ key: property.target, value })
+        // Images
+        if (/ \d(.*)[a-zA-Z]/.test(value)) {
+          // e.g. srcset="xxx 1x, xxx 2x", srcset="xxx 100vw, xxx 200w"
+          const arr = value.split(', ')
+          arr.forEach((a) => {
+            const p = a.replace(/ \d(.*)[a-zA-Z]/, '')
+            const image = this.#image(p, root)
+            data.push({ key: property.target, value: p, image })
+          })
+        } else {
+          const image = this.#image(value, root)
+          data.push({ key: property.target, value, image })
+        }
       })
     })
 
@@ -154,5 +170,55 @@ export default class Search extends BaseModule {
     if (/^video/.test(property.target)) return 'src'
 
     return null
+  }
+
+  /**
+   * Get base64 string
+   * @param value
+   * @param root
+   */
+  #image = (value: string, root: string): string | undefined => {
+    if (!regImageExt.test(value)) return
+
+    value = value.replace(/https?:\/\/(.*?)\//, '').replace(/\?[^.]+$/, '')
+    if (!/^\//.test(value)) value = `/${value}`
+    const reg = new RegExp(`^${root}`)
+    value = value.replace(reg, '')
+    const targetPath = path.join(this.#dir, value)
+
+    if (!fs.existsSync(targetPath)) return 'oops'
+
+    const base64 = fs.readFileSync(targetPath, 'base64')
+    const mime = this.#mime(targetPath)
+
+    if (mime == null) return 'unknown'
+
+    return `data:${mime};base64,${base64}`
+  }
+
+  /**
+   * Image MIME
+   * @param targetPath
+   */
+  #mime = (targetPath: string): string | undefined => {
+    const ext = targetPath.match(regExt)
+
+    if (ext == null) return
+
+    switch (ext[0].toLocaleLowerCase()) {
+      case '.png':
+        return 'image/png'
+      case '.jpg':
+      case '.jpeg':
+        return 'image/jpeg'
+      case '.gif':
+        return 'image/gif'
+      case 'webp':
+        return 'image/webp'
+      case '.svg':
+        return 'image/svg+xml'
+      default:
+        return
+    }
   }
 }

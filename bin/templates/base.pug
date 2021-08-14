@@ -10,7 +10,7 @@ html
     main: .apps
       for item in htmlItems
         section.apps-section
-          h2.typography-headline= item.filename
+          h2.apps-headline= item.filename
 
           .apps-container: table.table
             thead: tr
@@ -24,12 +24,22 @@ html
                   th= res.key
                   td
                     if res.value
-                      = res.value
+                      != res.value
                     else
                       span.not-exist Not exist
 
-                  //- TODO: images
-                  td &nbsp;
+                  //- image
+                  td
+                    if res.image == null || res.image === ''
+                      | &nbsp;
+                    else if res.image === 'oops'
+                      include components/broken-image
+                      | <br>#[span.oops Oops! Broken image.]
+                    else if res.image === 'unknown'
+                      | Sorry. Couldn't analyze it.
+                    else
+                      img(src=res.image width=120 alt="")
+
 
     footer: .apps: .footer
       small.footer-copy &copy; #[a(href=`${project}` target="_blank") io arc project] All rights reserved.

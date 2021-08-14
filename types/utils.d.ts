@@ -14,11 +14,12 @@ interface IfConfigFile {
   search: TSearch[]
   ext?: string
   dir?: string
+  root?: string
 }
 
-// TODO: 検索結果
+// Result data
 interface IfSearchResult {
   filename: string
   type: 'html' | 'css'
-  data: { key: string; value: string; image?: string | null }[]
+  data: { key: string; value: string; image?: string }[]
 }

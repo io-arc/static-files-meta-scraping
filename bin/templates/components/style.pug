@@ -5,6 +5,12 @@ style.
     color: #333;
   }
 
+  img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+  }
+
   .apps {
     padding-left: 20px;
     padding-right: 20px;
@@ -22,6 +28,18 @@ style.
     padding-top: 20px;
   }
 
+  .apps-headline {
+    width: 100%;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    font-size: 20px;
+    border-bottom: 2px solid #555B6E;
+    color: #6667AB;
+    margin: 0;
+    padding: 5px 0
+  }
+
   .header {
     padding: 20px 0;
   }
@@ -37,14 +55,6 @@ style.
     padding-top: 30px;
   }
 
-  .typography-headline {
-    font-size: 20px;
-    padding-bottom: 5px;
-    border-bottom: 2px solid #555B6E;
-    color: #6667AB;
-    margin: 0;
-  }
-
   .table {
     width: 100%;
     font-size: 16px;
@@ -57,6 +67,7 @@ style.
 
   .table th, .table td {
     padding: 10px;
+    word-break: break-all;
   }
 
   .table thead tr {
@@ -82,6 +93,11 @@ style.
 
   .not-exist {
     color: #999;
+  }
+
+  .oops {
+    color: #a12929;
+    font-weight: bold;
   }
 
   footer {
