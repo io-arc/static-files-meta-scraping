@@ -1,6 +1,14 @@
 // Config file name
 type TConfigFile = string
 
+// Command options
+interface IfCommandOptions {
+  ext?: string
+  dir?: string
+  find?: string
+  root?: string
+}
+
 // Search target
 type TSearch = {
   // like CSS property
@@ -14,6 +22,7 @@ interface IfConfigFile {
   search: TSearch[]
   ext: string
   dir: string
+  find?: string
   root: string
 }
 

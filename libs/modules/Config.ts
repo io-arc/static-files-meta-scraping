@@ -8,7 +8,7 @@ import BaseModule from '~/libs/modules/BaseModule'
 export default class Config extends BaseModule {
   readonly #data = searchDefaultConfig
 
-  constructor(ops: { ext?: string; dir?: string; root?: string }) {
+  constructor(ops: IfCommandOptions) {
     super()
     const file = this.#readFile()
     if (file != null) {
@@ -19,6 +19,7 @@ export default class Config extends BaseModule {
     if (ops.ext != null) this.#data.ext = ops.ext
     if (ops.dir != null) this.#data.dir = ops.dir
     if (ops.root != null) this.#data.root = ops.root
+    if (ops.find != null) this.#data.find = ops.find
   }
 
   public targetExt(): string {
@@ -27,6 +28,10 @@ export default class Config extends BaseModule {
 
   public targetDir(): string {
     return this.#data.dir
+  }
+
+  public targetFind(): string | undefined {
+    return this.#data.find
   }
 
   public searchProperties(): TSearch[] {

@@ -16,10 +16,13 @@ export default class Search extends BaseModule {
     CliProgress.Presets.shades_classic
   )
 
-  constructor(dir: string, ext: string) {
+  constructor(dir: string, ext: string, find?: string) {
     super()
 
-    const files = glob.sync(`${dir}/**/*.${/,/.test(ext) ? `{${ext}}` : ext}`)
+    const _dir =
+      find != null ? `${dir}/${/,/.test(find) ? `{${find}}` : find}` : dir
+
+    const files = glob.sync(`${_dir}/**/*.${/,/.test(ext) ? `{${ext}}` : ext}`)
     this.#files = this.#sort(files)
     this.#dir = dir
   }
@@ -72,22 +75,31 @@ export default class Search extends BaseModule {
    */
   #sort = (files: string[]): string[] => {
     return files.sort((a, b) => {
+      const sA = a.split('/').length
+      const sB = b.split('/').length
+
+      if (sA > sB) {
+        return 1
+      } else if (sA < sB) {
+        return -1
+      }
+
       const rA = regExt.exec(a)
       const rB = regExt.exec(b)
 
       if (!rA) {
-        if (!rB) return a > b ? -1 : 1
-        return -1
-      } else if (!rB) {
+        if (!rB) return a > b ? 1 : -1
         return 1
+      } else if (!rB) {
+        return -1
       }
 
       const aE = rA[0]
       const bE = rB[0]
 
-      if (aE !== bE) return aE > bE ? -1 : 1
+      if (aE !== bE) return aE > bE ? 1 : -1
 
-      return a > b ? -1 : 1
+      return a > b ? 1 : -1
     })
   }
 

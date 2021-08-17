@@ -25,15 +25,34 @@ program
   //   'Search target extensions. e.g. html',
   //   undefined
   // )
-  .option('-d, --dir <target directory>', 'Search target directory', undefined)
-  .option('-r, --root <root path>', 'URL root path', undefined)
+  .option(
+    '-d, --dir <target directory>',
+    'Search target output directory.',
+    undefined
+  )
+  .option(
+    '-f, --find <find directories>',
+    `Specify a directory to be further targeted from the target directories.
+Comma separated if there are multiple directories.
+e.g. en,ja`,
+    undefined
+  )
+  .option(
+    '-r, --root <actual root path>',
+    'When searching for images, specify if the output file is different from the actual root path.',
+    undefined
+  )
   .parse(process.argv)
 
 /** exec */
 ;(async (ops): Promise<void> => {
   /** exec */
-  const config$ = new Config({ ext: ops.ext, dir: ops.dir, root: ops.root })
-  const search$ = new Search(config$.targetDir(), config$.targetExt())
+  const config$ = new Config(ops)
+  const search$ = new Search(
+    config$.targetDir(),
+    config$.targetExt(),
+    config$.targetFind()
+  )
 
   const result = search$.exec(config$.searchProperties(), config$.rootPath())
 
@@ -47,4 +66,4 @@ program
   file$.write()
 
   process.exit(0)
-})(program.opts<{ ext?: string; dir?: string; root?: string }>())
+})(program.opts<IfCommandOptions>())
