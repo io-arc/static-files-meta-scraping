@@ -12,9 +12,9 @@ type TSearch = {
 // Config file data
 interface IfConfigFile {
   search: TSearch[]
-  ext?: string
-  dir?: string
-  root?: string
+  ext: string
+  dir: string
+  root: string
 }
 
 // Result data
