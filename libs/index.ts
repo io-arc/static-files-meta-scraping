@@ -1,5 +1,6 @@
 import { program } from 'commander'
-import { bold } from 'kleur'
+import downloadsFolder from 'downloads-folder'
+import { bold, italic } from 'kleur'
 import updateNotifier from 'update-notifier'
 import Config from '~/libs/modules/Config'
 import File from '~/libs/modules/File'
@@ -26,20 +27,31 @@ program
   //   undefined
   // )
   .option(
-    '-d, --dir <target directory>',
-    'Search target output directory.',
+    '-d, --dir <directory>',
+    `Search target output directory. (default: ${italic('dist')})`,
     undefined
   )
   .option(
-    '-f, --find <find directories>',
+    '-f, --find <directories>',
     `Specify a directory to be further targeted from the target directories.
-Comma separated if there are multiple directories.
+Comma separated if there are multiple directories. (default: ${italic(
+      'undefined'
+    )})
 e.g. en,ja`,
     undefined
   )
   .option(
     '-r, --root <actual root path>',
-    'When searching for images, specify if the output file is different from the actual root path.',
+    `When searching for images, specify if the output file is different from the actual root path. (default: ${italic(
+      '/'
+    )})`,
+    undefined
+  )
+  .option(
+    '-o, --output <directory>',
+    `Specifies the directory to output the result files. (default: ${italic(
+      downloadsFolder()
+    )})`,
     undefined
   )
   .parse(process.argv)
@@ -62,8 +74,7 @@ e.g. en,ja`,
   }
 
   const file$ = new File(result)
-  // TODO: Configで出力先を指定可能にする(デフォルトはdownloadディレクトリ)
-  file$.write()
+  file$.write(config$.output())
 
   process.exit(0)
 })(program.opts<IfCommandOptions>())

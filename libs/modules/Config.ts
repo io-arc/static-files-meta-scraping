@@ -20,6 +20,7 @@ export default class Config extends BaseModule {
     if (ops.dir != null) this.#data.dir = ops.dir
     if (ops.root != null) this.#data.root = ops.root
     if (ops.find != null) this.#data.find = ops.find
+    if (ops.output != null) this.#data.output = ops.output
   }
 
   public targetExt(): string {
@@ -40,6 +41,10 @@ export default class Config extends BaseModule {
 
   public rootPath(): string {
     return this.#data.root
+  }
+
+  public output(): string {
+    return this.#data.output
   }
 
   /** Read for configuration file */

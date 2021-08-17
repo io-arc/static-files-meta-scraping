@@ -1,4 +1,6 @@
 /** Default search target tags */
+import downloadsFolder from 'downloads-folder'
+
 export const searchDefaultConfig: IfConfigFile = {
   // search target
   search: [
@@ -21,5 +23,6 @@ export const searchDefaultConfig: IfConfigFile = {
   ],
   ext: 'html',
   dir: 'dist',
-  root: '/'
+  root: '/',
+  output: downloadsFolder()
 }

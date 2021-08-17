@@ -7,6 +7,7 @@ interface IfCommandOptions {
   dir?: string
   find?: string
   root?: string
+  output?: string
 }
 
 // Search target
@@ -24,6 +25,7 @@ interface IfConfigFile {
   dir: string
   find?: string
   root: string
+  output: string
 }
 
 // Result data

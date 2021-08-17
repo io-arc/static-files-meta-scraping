@@ -1,6 +1,5 @@
-import downloadsFolder from 'downloads-folder'
 import fs from 'fs'
-import { blue, bold, green } from 'kleur'
+import { blue, green } from 'kleur'
 import path from 'path'
 import pug from 'pug'
 import BaseModule from '~/libs/modules/BaseModule'
@@ -43,12 +42,16 @@ export default class File extends BaseModule {
    * Result write
    * @param output - directory
    */
-  public write(output?: string): void {
-    const file = `${path.join(output || downloadsFolder(), 'result.html')}`
-    fs.writeFileSync(file, this.#body)
+  public write(output: string): void {
+    try {
+      const file = `${path.join(output, 'result.html')}`
+      fs.writeFileSync(file, this.#body)
 
-    console.log(bold(green(`\nCompleted file wrote.`)))
-    console.log(bold(blue(`Output: ${file}`)))
+      console.log(green().bold(`\nCompleted file wrote.`))
+      console.log(blue().bold(`Output: ${file}`))
+    } catch (e) {
+      this.exit(e)
+    }
   }
 
   /**

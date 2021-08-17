@@ -27,6 +27,10 @@ export default class Search extends BaseModule {
     this.#dir = dir
   }
 
+  /**
+   * @param searchProperties
+   * @param root
+   */
   public exec(searchProperties: TSearch[], root: string): IfSearchResult[] {
     if (this.#files.length === 0) {
       console.log(red('No match files.'))
