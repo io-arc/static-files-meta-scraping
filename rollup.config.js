@@ -41,7 +41,8 @@ Copyright (c) 2021 ${author}
     'glob',
     'cheerio',
     'pug',
-    'downloads-folder'
+    'downloads-folder',
+    'cli-progress'
   ],
 
   plugins: [

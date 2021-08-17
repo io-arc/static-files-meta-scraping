@@ -19,6 +19,7 @@ process.on('SIGINT', (): void => {
 /** Library command */
 program
   .version(version)
+  // TODO: TBD
   // .option(
   //   '-e, --ext <extensions>',
   //   'Search target extensions. e.g. html',
@@ -36,7 +37,12 @@ program
 
   const result = search$.exec(config$.searchProperties(), config$.rootPath())
 
-  const file$ = new File(result, config$.searchProperties())
+  if (result.length === 0) {
+    process.exit(0)
+    return
+  }
+
+  const file$ = new File(result)
   // TODO: Configで出力先を指定可能にする(デフォルトはdownloadディレクトリ)
   file$.write()
 

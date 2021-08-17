@@ -1,5 +1,6 @@
 import downloadsFolder from 'downloads-folder'
 import fs from 'fs'
+import { blue, bold, green } from 'kleur'
 import path from 'path'
 import pug from 'pug'
 import BaseModule from '~/libs/modules/BaseModule'
@@ -21,14 +22,14 @@ const pugOps: pug.Options = {
 export default class File extends BaseModule {
   readonly #body
 
-  constructor(result: IfSearchResult[], properties: TSearch[]) {
+  constructor(result: IfSearchResult[]) {
     super()
 
     const fn = pug.compileFile(
       path.join(__dirname, 'templates', 'base.pug'),
       pugOps
     )
-    const htmlItems = this.#html(result, properties)
+    const htmlItems = this.#html(result)
 
     this.#body = fn({
       htmlItems,
@@ -42,22 +43,19 @@ export default class File extends BaseModule {
    * Result write
    * @param output - directory
    */
-  public write(output?: string) {
-    fs.writeFileSync(
-      `${path.join(output || downloadsFolder(), 'result.html')}`,
-      this.#body
-    )
+  public write(output?: string): void {
+    const file = `${path.join(output || downloadsFolder(), 'result.html')}`
+    fs.writeFileSync(file, this.#body)
+
+    console.log(bold(green(`\nCompleted file wrote.`)))
+    console.log(bold(blue(`Output: ${file}`)))
   }
 
   /**
    * Type HTML
    * @param result
-   * @param properties
    */
-  #html = (
-    result: IfSearchResult[],
-    properties: TSearch[]
-  ): IfFileDataBlock[] => {
+  #html = (result: IfSearchResult[]): IfFileDataBlock[] => {
     const items = result.filter((d) => d.type === 'html')
     const block: IfFileDataBlock[] = []
 
@@ -67,21 +65,6 @@ export default class File extends BaseModule {
       item.data.forEach((_i) =>
         blockArr.push({ key: _i.key, value: _i.value, image: _i.image })
       )
-
-      // properties.forEach((property) => {
-      //   const _d = item.data.filter((d) => d.key === property.target)
-      //
-      //   const v: string[] = []
-      //   _d.forEach((d) => v.push(d.value))
-      //
-      //   const i: string[] = []
-      //   _d.forEach((d) => {
-      //     if (d.image == null) return
-      //     i.push(d.image)
-      //   })
-      //
-      //   blockArr.push({ key: property.target, value: v.join('<br>'), image: i })
-      // })
 
       block.push({ filename: item.filename, result: blockArr })
     })

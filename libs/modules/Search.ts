@@ -1,18 +1,20 @@
 import cheerio from 'cheerio'
+import CliProgress from 'cli-progress'
 import fs from 'fs'
 import glob from 'glob'
+import { red } from 'kleur'
 import path from 'path'
 import { regExt, regImageExt } from '~/libs/const/utils'
 import BaseModule from '~/libs/modules/BaseModule'
 
-interface IfSearchItem {
-  ext: string
-  files: string[]
-}
-
 export default class Search extends BaseModule {
   readonly #dir: string = ''
   readonly #files: string[] = []
+
+  readonly #progress = new CliProgress.SingleBar(
+    { hideCursor: true },
+    CliProgress.Presets.shades_classic
+  )
 
   constructor(dir: string, ext: string) {
     super()
@@ -24,39 +26,39 @@ export default class Search extends BaseModule {
 
   public exec(searchProperties: TSearch[], root: string): IfSearchResult[] {
     if (this.#files.length === 0) {
-      // TODO: end
+      console.log(red('No match files.'))
       return []
     }
 
-    const pickupExt = (file: string): string | undefined => {
-      const reg = regExt.exec(file)
-      if (reg == null) return
-
-      return reg[0]
-    }
+    this.#progress.start(this.#files.length, 0)
 
     const result: IfSearchResult[] = []
 
-    // TODO: progress
-
     this.#files.forEach((file) => {
-      const ext = pickupExt(file)
+      this.#progress.increment()
+
+      const ext = this.#pickupExt(file)
       if (ext == null) return
 
       const body = fs.readFileSync(file, 'utf8')
       const filename = file.replace(`${this.#dir}/`, '')
 
-      switch (ext) {
-        case '.css':
-          // TODO: CSS
-          return
-        default:
-          // HTML
-          const data = this.#html(body, searchProperties, root)
-          result.push({ filename, type: 'html', data })
-          return
-      }
+      // TODO: TBD
+      // switch (ext) {
+      //   case '.css':
+      //     // TODO: CSS
+      //     return
+      //   default:
+      //     // HTML
+      //     const data = this.#html(body, searchProperties, root)
+      //     result.push({ filename, type: 'html', data })
+      //     return
+      // }
+      const data = this.#html(body, searchProperties, root)
+      result.push({ filename, type: 'html', data })
     })
+
+    this.#progress.stop()
 
     return result
   }
@@ -68,7 +70,7 @@ export default class Search extends BaseModule {
    *
    * @param files
    */
-  #sort = (files: string[]) => {
+  #sort = (files: string[]): string[] => {
     return files.sort((a, b) => {
       const rA = regExt.exec(a)
       const rB = regExt.exec(b)
@@ -134,9 +136,19 @@ export default class Search extends BaseModule {
     return data
   }
 
-  // TODO: cssの場合はbackground,background-imageを抽出
-  #css = (body: string) => {
-    console.log(body)
+  // TODO: pickup of `background,background-image`
+  // #css = (body: string): void => {
+  //   console.log(body)
+  // }
+
+  /**
+   * @param file
+   */
+  #pickupExt = (file: string): string | undefined => {
+    const reg = regExt.exec(file)
+    if (reg == null) return
+
+    return reg[0]
   }
 
   /**
