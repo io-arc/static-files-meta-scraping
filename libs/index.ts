@@ -28,8 +28,7 @@ program
   // )
   .option(
     '-d, --dir <directory>',
-    `Search target output directory. (default: ${italic('dist')})`,
-    undefined
+    `Search target output directory. (default: ${italic('dist')})`
   )
   .option(
     '-f, --find <directories>',
@@ -37,22 +36,19 @@ program
 Comma separated if there are multiple directories. (default: ${italic(
       'undefined'
     )})
-e.g. en,ja`,
-    undefined
+e.g. en,ja`
   )
   .option(
     '-r, --root <actual root path>',
     `When searching for images, specify if the output file is different from the actual root path. (default: ${italic(
       '/'
-    )})`,
-    undefined
+    )})`
   )
   .option(
     '-o, --output <directory>',
     `Specifies the directory to output the result files. (default: ${italic(
       downloadsFolder()
-    )})`,
-    undefined
+    )})`
   )
   .parse(process.argv)
 
