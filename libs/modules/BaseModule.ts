@@ -1,4 +1,4 @@
-import { red } from 'kleur'
+import { bold, red } from 'kleur'
 
 export default class BaseModule {
   protected exit(error?: Error): void {
@@ -7,5 +7,10 @@ export default class BaseModule {
       console.log(red(JSON.stringify(error)))
     }
     process.exit(1)
+  }
+
+  protected terminate(): void {
+    console.log(bold('Bye !'))
+    process.exit(0)
   }
 }

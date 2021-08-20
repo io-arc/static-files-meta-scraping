@@ -64,7 +64,7 @@ e.g. en,ja`
 ;(async (ops): Promise<void> => {
   if (ops.init != null) {
     const settingFile$ = new SettingFile(ops.init)
-    settingFile$.write()
+    await settingFile$.write()
 
     process.exit(0)
     return

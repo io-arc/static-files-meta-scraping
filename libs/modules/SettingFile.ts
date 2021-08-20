@@ -1,4 +1,5 @@
 import fs from 'fs'
+import inquirer from 'inquirer'
 import { blue, green } from 'kleur'
 import os from 'os'
 import path from 'path'
@@ -22,9 +23,18 @@ export default class SettingFile extends BaseModule {
   /**
    * Saving settings file
    */
-  public write(): void {
+  public async write(): Promise<void> {
     try {
       const file = `${path.join(this.#dir, configFile)}`
+
+      if (fs.existsSync(file)) {
+        const confirm = await this.#confirm()
+        if (!confirm) {
+          this.terminate()
+          return
+        }
+      }
+
       const json = JSON.stringify(this.#preset(), null, 2)
 
       fs.writeFileSync(file, json)
@@ -32,6 +42,22 @@ export default class SettingFile extends BaseModule {
       console.log(`Saved in: ${blue(file)}`)
     } catch (e) {
       this.exit(e)
+    }
+  }
+
+  /** If there is an existing file */
+  #confirm = async (): Promise<boolean> => {
+    try {
+      const res = await inquirer.prompt<{ confirm: boolean }>({
+        type: 'confirm',
+        name: 'confirm',
+        message: 'The file already exists, do you want to overwrite it?',
+        default: false
+      })
+      return res.confirm
+    } catch (e) {
+      this.exit(e)
+      return false
     }
   }
 
