@@ -24,7 +24,7 @@ export default class Config extends BaseModule {
   }
 
   public targetExt(): string {
-    return this.#data.ext
+    return this.#data.ext as string
   }
 
   public targetDir(): string {
@@ -44,7 +44,7 @@ export default class Config extends BaseModule {
   }
 
   public output(): string {
-    return this.#data.output
+    return this.#data.output as string
   }
 
   /** Read for configuration file */

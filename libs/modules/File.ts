@@ -48,7 +48,7 @@ export default class File extends BaseModule {
       fs.writeFileSync(file, this.#body)
 
       console.log(green().bold(`\nCompleted file wrote.`))
-      console.log(blue().bold(`Output: ${file}`))
+      console.log(`Output: ${blue().bold(file)}`)
     } catch (e) {
       this.exit(e)
     }

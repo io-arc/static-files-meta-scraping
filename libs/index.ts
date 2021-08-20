@@ -1,10 +1,11 @@
-import { program } from 'commander'
+import { Option, program } from 'commander'
 import downloadsFolder from 'downloads-folder'
 import { bold, italic } from 'kleur'
 import updateNotifier from 'update-notifier'
 import Config from '~/libs/modules/Config'
 import File from '~/libs/modules/File'
 import Search from '~/libs/modules/Search'
+import SettingFile from '~/libs/modules/SettingFile'
 import { name, version } from '../package.json'
 
 /** Checking library version */
@@ -20,6 +21,13 @@ process.on('SIGINT', (): void => {
 /** Library command */
 program
   .version(version)
+  .addOption(
+    new Option(
+      '-i, --init [save]',
+      `Create a settings file.
+If don't parameter is save in the current directory`
+    ).choices(['global'])
+  )
   // TODO: TBD
   // .option(
   //   '-e, --ext <extensions>',
@@ -39,7 +47,7 @@ Comma separated if there are multiple directories. (default: ${italic(
 e.g. en,ja`
   )
   .option(
-    '-r, --root <actual root path>',
+    '-r, --root <path>',
     `When searching for images, specify if the output file is different from the actual root path. (default: ${italic(
       '/'
     )})`
@@ -54,6 +62,14 @@ e.g. en,ja`
 
 /** exec */
 ;(async (ops): Promise<void> => {
+  if (ops.init != null) {
+    const settingFile$ = new SettingFile(ops.init)
+    settingFile$.write()
+
+    process.exit(0)
+    return
+  }
+
   /** exec */
   const config$ = new Config(ops)
   const search$ = new Search(

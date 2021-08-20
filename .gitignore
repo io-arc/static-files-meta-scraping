@@ -149,3 +149,6 @@ fabric.properties
 .history/
 
 
+.meta-scraping.json
+!sample/.meta-scraping.json
+

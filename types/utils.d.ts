@@ -3,6 +3,7 @@ type TConfigFile = string
 
 // Command options
 interface IfCommandOptions {
+  init?: boolean | string
   ext?: string
   dir?: string
   find?: string
@@ -21,11 +22,11 @@ type TSearch = {
 // Config file data
 interface IfConfigFile {
   search: TSearch[]
-  ext: string
+  ext?: string
   dir: string
   find?: string
   root: string
-  output: string
+  output?: string
 }
 
 // Result data
